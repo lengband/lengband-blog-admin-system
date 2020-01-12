@@ -36,7 +36,6 @@ function Login(props) {
       withCredentials: true // 共享 session
     }).then(
       res => {
-        console.log(res.data)
         setIsLoading(false)
         if (res.data.data == '登录成功') {
           localStorage.setItem('openId', res.data.openId)

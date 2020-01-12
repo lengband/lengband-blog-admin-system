@@ -9,7 +9,6 @@ const { Option } = Select;
 const { TextArea } = Input
 
 function AddArticle(props) {
-  console.log(666);
 
   const [articleId, setArticleId] = useState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [articleTitle, setArticleTitle] = useState('')   //文章标题
@@ -36,7 +35,6 @@ function AddArticle(props) {
   const changeContent = (e) => {
     setArticleContent(e.target.value)
     let html = marked(e.target.value)
-    console.log(html, 'html');
     setMarkdownContent(html)
   }
 
@@ -113,7 +111,6 @@ function AddArticle(props) {
       return false
     }
     let dataProps = {}
-    console.log(selectedType)
     dataProps.type_id = selectedType
     dataProps.title = articleTitle
     dataProps.article_content = articleContent
@@ -124,7 +121,6 @@ function AddArticle(props) {
     // dataProps.article_content_html = markdownContent
     // dataProps.introduce_html = introducehtml
     if (articleId === 0) {
-      console.log('articleId=:' + articleId)
       dataProps.view_count = Math.ceil(Math.random() * 100) + 1000
       axios({
         method: 'post',
@@ -143,7 +139,6 @@ function AddArticle(props) {
         }
       )
     } else {
-      console.log('articleId:' + articleId)
       dataProps.id = articleId
       axios({
         method: 'post',
@@ -171,7 +166,7 @@ function AddArticle(props) {
       setArticleId(tmpId)
       getArticleById(tmpId)
     }
-  }, [])
+  }, [getTypeInfo, props.match.params.id])
 
   return (
     <div>

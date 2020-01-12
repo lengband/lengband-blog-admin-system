@@ -5,6 +5,7 @@ import AddArticle from './AddArticle'
 import ArticleList from './ArticleList'
 import '../static/css/AdminIndex.css'
 
+const img = require('../static/images/logo.png')
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -18,7 +19,6 @@ function AdminIndex(props) {
   };
 
   const handleClickArticle = e => {
-    console.log(e.item.props)
     if (e.key === 'addArticle') {
       props.history.push('/index/add')
     } else {
@@ -29,7 +29,7 @@ function AdminIndex(props) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-        <div className="logo" />
+        <div className="logo"><img style={{ 'height': 200 }} alt="lengband" src={img} /></div>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="1">
             <Icon type="pie-chart" />
