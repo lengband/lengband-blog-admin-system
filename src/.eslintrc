@@ -1,0 +1,29 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "extends": "airbnb",
+  "rules": {
+    "react-hooks/rules-of-hooks": "error", // 检查 Hook 的规则
+    "react-hooks/exhaustive-deps": "warn", // 检查 effect 的依赖
+    "semi": [0],
+    "react/jsx-filename-extension": [0],
+    "jsx-a11y/anchor-is-valid": [0],
+    "consistent-return": 0,
+    "arrow-parens": 0,
+    "max-len": "off",
+    "no-console": "off",
+    "react/no-danger": [0],
+    "no-shadow": "off",
+    "react/prop-types": [0],
+    "react/destructuring-assignment": [0],
+    "no-param-reassign": "off"
+  }
+}

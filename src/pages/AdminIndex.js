@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import { Route } from "react-router-dom";
+import {
+  Layout, Menu, Breadcrumb, Icon,
+} from 'antd';
+import { Route } from 'react-router-dom';
 import AddArticle from './AddArticle'
 import ArticleList from './ArticleList'
 import '../static/css/AdminIndex.css'
 
 const img = require('../static/images/logo.png')
-const { Header, Content, Footer, Sider } = Layout;
+
+const {
+  Header, Content, Footer, Sider,
+} = Layout;
 const { SubMenu } = Menu;
 
 
 function AdminIndex(props) {
-
   const [collapsed, setCollapsed] = useState(false)
 
   const onCollapse = collapsed => {
@@ -29,7 +33,7 @@ function AdminIndex(props) {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-        <div className="logo"><img style={{ 'height': 200 }} alt="lengband" src={img} /></div>
+        <div className="logo"><img style={{ height: 200 }} alt="lengband" src={img} /></div>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="1">
             <Icon type="pie-chart" />
@@ -42,12 +46,13 @@ function AdminIndex(props) {
           <SubMenu
             key="sub1"
             onClick={handleClickArticle}
-            title={
+            title={(
               <span>
                 <Icon type="desktop" />
                 <span>文章管理</span>
               </span>
-            }>
+            )}
+          >
             <Menu.Item key="addArticle">添加文章</Menu.Item>
             <Menu.Item key="articleList">文章列表</Menu.Item>
           </SubMenu>
@@ -77,7 +82,6 @@ function AdminIndex(props) {
       </Layout>
     </Layout>
   )
-
 }
 
 export default AdminIndex

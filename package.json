@@ -13,9 +13,21 @@
   },
   "scripts": {
     "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "yarn precommit && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint --fix --ext .js --ext .jsx src/",
+      "git add"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,5 +43,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.0.7",
+    "lint-staged": "^9.5.0"
   }
 }
