@@ -39,10 +39,6 @@ function AdminIndex(props) {
             <Icon type="pie-chart" />
             <span>工作台</span>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Icon type="desktop" />
-            <span>添加文章</span>
-          </Menu.Item>
           <SubMenu
             key="sub1"
             onClick={handleClickArticle}

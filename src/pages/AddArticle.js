@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import marked from 'marked'
 import axios from 'axios'
+import moment from 'moment'
 import {
   Row, Col, Input, Select, Button, DatePicker, message,
 } from 'antd'
@@ -17,7 +18,7 @@ function AddArticle(props) {
   const [markdownContent, setMarkdownContent] = useState('预览内容') // html内容
   const [introducemd, setIntroducemd] = useState() // 简介的markdown内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') // 简介的html内容
-  const [showDate, setShowDate] = useState() // 发布日期
+  const [createTime, setCreateTime] = useState() // 发布日期
   // const [updateDate, setUpdateDate] = useState() // 修改日志的日期
   const [typeInfo, setTypeInfo] = useState([]) // 文章类别信息
   const [selectedType, setSelectType] = useState('') // 选择的文章类别
@@ -59,7 +60,7 @@ function AddArticle(props) {
         setIntroducemd(res.data.data[0].introduce)
         const tmpInt = marked(res.data.data[0].introduce)
         setIntroducehtml(tmpInt)
-        setShowDate(res.data.data[0].addTime)
+        setCreateTime(res.data.data[0].create_time)
         setSelectType(res.data.data[0].typeId)
       },
     )
@@ -76,17 +77,17 @@ function AddArticle(props) {
     if (!selectedType) {
       message.error('必须选择文章类别')
       return false
-    } if (!articleTitle) {
+    }
+    if (!articleTitle) {
       message.error('文章名称不能为空')
       return false
-    } if (!articleContent) {
+    }
+    if (!articleContent) {
       message.error('文章内容不能为空')
       return false
-    } if (!introducemd) {
+    }
+    if (!introducemd) {
       message.error('简介不能为空')
-      return false
-    } if (!showDate) {
-      message.error('发布日期不能为空')
       return false
     }
     const dataProps = {}
@@ -94,13 +95,9 @@ function AddArticle(props) {
     dataProps.title = articleTitle
     dataProps.article_content = articleContent
     dataProps.introduce = introducemd
-    const datetext = showDate.replace('-', '/') // 把字符串转换成时间戳
-    dataProps.addTime = (new Date(datetext).getTime()) / 1000
-    // dataProps.part_count = partCount
-    // dataProps.article_content_html = markdownContent
-    // dataProps.introduce_html = introducehtml
-    if (articleId === 0) {
-      dataProps.view_count = Math.ceil(Math.random() * 100) + 1000
+    dataProps.create_time = createTime
+    if (articleId === 0) { // 添加文章
+      dataProps.view_count = 0
       axios({
         method: 'post',
         url: servicePath.addArticle,
@@ -117,7 +114,7 @@ function AddArticle(props) {
           }
         },
       )
-    } else {
+    } else { // 修改文章
       dataProps.id = articleId
       axios({
         method: 'post',
@@ -238,7 +235,9 @@ function AddArticle(props) {
             <Col span={12}>
               <div className="date-select">
                 <DatePicker
-                  onChange={(date, dateString) => setShowDate(dateString)}
+                  allowClear={false}
+                  value={moment(createTime)}
+                  onChange={(date, dateString) => setCreateTime(dateString)}
                   placeholder="发布日期"
                   size="large"
                 />

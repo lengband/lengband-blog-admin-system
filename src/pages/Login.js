@@ -32,7 +32,7 @@ function Login(props) {
       method: 'post',
       url: servicePath.checkLogin,
       data: dataProps,
-      withCredentials: true, // 共享 session
+      withCredentials: true, // 携带cookie，共享 session
     }).then(
       res => {
         setIsLoading(false)

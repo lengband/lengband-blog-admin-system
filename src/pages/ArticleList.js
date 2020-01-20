@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// import '../static/css/ArticleList.css'
+import moment from 'moment'
+import '../static/css/ArticleList.css'
+
 import {
   List, Row, Col, Modal, message, Button,
 } from 'antd';
@@ -68,9 +70,6 @@ function ArticleList(props) {
               <b>发布时间</b>
             </Col>
             <Col span={3}>
-              <b>集数</b>
-            </Col>
-            <Col span={3}>
               <b>浏览量</b>
             </Col>
             <Col span={4}>
@@ -90,12 +89,7 @@ function ArticleList(props) {
                 {item.typeName}
               </Col>
               <Col span={3}>
-                {item.addTime}
-              </Col>
-              <Col span={3}>
-                共
-                <span>{item.part_count}</span>
-集
+                {moment(item.create_time).format('YYYY-MM-DD')}
               </Col>
               <Col span={3}>
                 {item.view_count}
