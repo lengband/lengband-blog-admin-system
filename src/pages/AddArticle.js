@@ -95,7 +95,7 @@ function AddArticle(props) {
     dataProps.title = articleTitle
     dataProps.article_content = articleContent
     dataProps.introduce = introducemd
-    dataProps.create_time = createTime
+    dataProps.create_time = moment(createTime).format('YYYY-MM-DD HH:mm:ss')
     if (articleId === 0) { // 添加文章
       dataProps.view_count = 0
       axios({

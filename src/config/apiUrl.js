@@ -1,4 +1,4 @@
-const ipUrl = 'http://127.0.0.1:7001/admin/'
+const ipUrl = 'http://127.0.0.1:7001/api/'
 
 const servicePath = {
   checkLogin: `${ipUrl}checkLogin`, //  检查用户名密码
