@@ -4,6 +4,7 @@ import './index.css';
 import App from './pages/Main';
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css';
+import './lib/auth'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

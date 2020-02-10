@@ -5,6 +5,7 @@ import {
 import { Route } from 'react-router-dom';
 import AddArticle from './AddArticle'
 import ArticleList from './ArticleList'
+import UserList from './UserList'
 import '../static/css/AdminIndex.css'
 
 const img = require('../static/images/logo.png')
@@ -30,11 +31,17 @@ function AdminIndex(props) {
     }
   }
 
+  const MenuClick = e => {
+    if (e.key === 'userlist') {
+      props.history.push('/index/userlist')
+    }
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className="logo"><img style={{ width: '100%' }} alt="lengband" src={img} /></div>
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={MenuClick}>
           <Menu.Item key="1">
             <Icon type="pie-chart" />
             <span>工作台</span>
@@ -52,6 +59,10 @@ function AdminIndex(props) {
             <Menu.Item key="addArticle">添加文章</Menu.Item>
             <Menu.Item key="articleList">文章列表</Menu.Item>
           </SubMenu>
+          <Menu.Item key="userlist">
+            <Icon type="file" />
+            <span>用户管理</span>
+          </Menu.Item>
           <Menu.Item key="9">
             <Icon type="file" />
             <span>留言管理</span>
@@ -71,6 +82,7 @@ function AdminIndex(props) {
               <Route path="/index/add/" exact component={AddArticle} />
               <Route path="/index/add/:id" exact component={AddArticle} />
               <Route path="/index/list/" component={ArticleList} />
+              <Route path="/index/userlist/" component={UserList} />
             </div>
           </div>
         </Content>

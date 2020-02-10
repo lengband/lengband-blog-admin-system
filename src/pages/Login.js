@@ -4,8 +4,9 @@ import '../static/css/Login.css';
 import {
   Card, Input, Icon, Button, Spin, message,
 } from 'antd';
-import axios from 'axios'
-import servicePath from '../config/apiUrl'
+import http from '../lib/http'
+import { setToken } from '../lib/auth'
+import { servicePath } from '../config/apiUrl'
 
 function Login(props) {
   const [userName, setUserName] = useState('')
@@ -15,7 +16,7 @@ function Login(props) {
   useEffect(() => {
   }, [])
 
-  const checkLogin = () => {
+  const login = () => {
     if (!userName) {
       message.error('用户名不能为空')
       return false
@@ -25,25 +26,25 @@ function Login(props) {
     }
     setIsLoading(true)
     const dataProps = {
-      userName,
+      name: userName,
       password,
     }
-    axios({
+    http({
       method: 'post',
-      url: servicePath.checkLogin,
+      url: servicePath.login,
       data: dataProps,
+      header: { 'Access-Control-Allow-Origin': '*' },
       withCredentials: true, // 携带cookie，共享 session
-    }).then(
-      res => {
+    }).then(res => {
+      setIsLoading(false)
+      props.history.push('/index')
+      setToken(res.data.token)
+    })
+      .catch(error => {
+        message.error('用户名密码错误')
         setIsLoading(false)
-        if (res.data.data === '登录成功') {
-          localStorage.setItem('openId', res.data.openId)
-          props.history.push('/index')
-        } else {
-          message.error('用户名密码错误')
-        }
-      },
-    )
+        throw error
+      })
   }
 
   return (
@@ -68,7 +69,7 @@ function Login(props) {
           />
           <br />
           <br />
-          <Button type="primary" size="large" block onClick={checkLogin}> Login in </Button>
+          <Button type="primary" size="large" block onClick={login}> Login in </Button>
         </Card>
       </Spin>
     </div>

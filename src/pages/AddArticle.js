@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import marked from 'marked'
-import axios from 'axios'
 import moment from 'moment'
 import {
   Row, Col, Input, Select, Button, DatePicker, message,
 } from 'antd'
-import servicePath from '../config/apiUrl'
+import http from '../lib/http'
+import { getToken } from '../lib/auth'
+import { servicePath } from '../config/apiUrl'
 import '../static/css/AddArticle.css'
 
 const { Option } = Select
@@ -47,7 +48,7 @@ function AddArticle(props) {
   }
 
   const getArticleById = (id) => {
-    axios(servicePath.getArticleById + id, {
+    http(servicePath.getArticleById + id, {
       withCredentials: true,
       header: { 'Access-Control-Allow-Origin': '*' },
     }).then(
@@ -98,7 +99,7 @@ function AddArticle(props) {
     dataProps.create_time = moment(createTime).format('YYYY-MM-DD HH:mm:ss')
     if (articleId === 0) { // 添加文章
       dataProps.view_count = 0
-      axios({
+      http({
         method: 'post',
         url: servicePath.addArticle,
         header: { 'Access-Control-Allow-Origin': '*' },
@@ -116,7 +117,7 @@ function AddArticle(props) {
       )
     } else { // 修改文章
       dataProps.id = articleId
-      axios({
+      http({
         method: 'post',
         url: servicePath.updateArticle,
         header: { 'Access-Control-Allow-Origin': '*' },
@@ -137,16 +138,14 @@ function AddArticle(props) {
   useEffect(() => {
     // 从中台得到文章类别信息
     const getTypeInfo = () => {
-      axios({
+      http({
         method: 'get',
         url: servicePath.getTypeInfo,
         header: { 'Access-Control-Allow-Origin': '*' },
         withCredentials: true,
       }).then(
         (res) => {
-          if (res.data.data === '没有登录') {
-            localStorage.removeItem('openId')
-            console.log(props, 'props');
+          if (!getToken()) {
             props.history.push('/')
           } else {
             setTypeInfo(res.data.data)

@@ -10,14 +10,14 @@ import { servicePath } from '../config/apiUrl'
 
 const { confirm } = Modal;
 
-function ArticleList(props) {
+function UserList(props) {
   const [list, setList] = useState([])
 
   // 得到文章列表
   const getList = () => {
     http({
       method: 'get',
-      url: servicePath.getArticleList,
+      url: servicePath.getUserList,
       withCredentials: true,
       header: { 'Access-Control-Allow-Origin': '*' },
     }).then(
@@ -106,4 +106,4 @@ function ArticleList(props) {
     </div>
   )
 }
-export default ArticleList
+export default UserList
