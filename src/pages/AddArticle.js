@@ -21,7 +21,7 @@ function AddArticle(props) {
   const [introducehtml, setIntroducehtml] = useState('等待编辑') // 简介的html内容
   const [createTime, setCreateTime] = useState() // 发布日期
   // const [updateDate, setUpdateDate] = useState() // 修改日志的日期
-  const [typeInfo, setTypeInfo] = useState([]) // 文章类别信息
+  const [typeOpts, setTypeOpts] = useState([]) // 文章类别信息
   const [selectedType, setSelectType] = useState('') // 选择的文章类别
 
   marked.setOptions({
@@ -92,11 +92,11 @@ function AddArticle(props) {
       return false
     }
     const dataProps = {}
-    dataProps.type_id = selectedType
-    dataProps.title = articleTitle
-    dataProps.article_content = articleContent
+    dataProps.type = selectedType
+    dataProps.name = articleTitle
+    dataProps.content = articleContent
     dataProps.introduce = introducemd
-    dataProps.create_time = moment(createTime).format('YYYY-MM-DD HH:mm:ss')
+    // dataProps.create_time = moment(createTime).format('YYYY-MM-DD HH:mm:ss')
     if (articleId === 0) { // 添加文章
       dataProps.view_count = 0
       http({
@@ -107,7 +107,7 @@ function AddArticle(props) {
         withCredentials: true,
       }).then(
         (res) => {
-          setArticleId(res.data.insertId)
+          setArticleId(res.data._id)
           if (res.data.isScuccess) {
             message.success('文章发布成功')
           } else {
@@ -148,7 +148,8 @@ function AddArticle(props) {
           if (!getToken()) {
             props.history.push('/')
           } else {
-            setTypeInfo(res.data.data)
+            console.log(res.data.data, 'res.data.data');
+            setTypeOpts(res.data.data)
             if (res.data.data && res.data.data.length) {
               setSelectType(res.data.data[0].id) // !!! 未生效
             }
@@ -183,7 +184,7 @@ function AddArticle(props) {
             <Col span={4}>
               <Select defaultValue={selectedType} size="large" onChange={selectTypeHandler}>
                 {
-                  typeInfo.map(item => (<Option key={item.id} value={item.id}>{item.typeName}</Option>))
+                  typeOpts.map(item => (<Option key={item._id} value={item._id}>{item.cn_name}</Option>))
                 }
               </Select>
             </Col>

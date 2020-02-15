@@ -5,6 +5,7 @@ import App from './pages/Main';
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css';
 import './lib/auth'
+// import 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
