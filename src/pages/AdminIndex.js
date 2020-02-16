@@ -13,8 +13,6 @@ const img = require('../static/images/logo.png')
 const {
   Header, Content, Footer, Sider,
 } = Layout;
-const { SubMenu } = Menu;
-
 
 function AdminIndex(props) {
   const [collapsed, setCollapsed] = useState(false)
@@ -23,18 +21,9 @@ function AdminIndex(props) {
     setCollapsed(collapsed)
   };
 
-  const handleClickArticle = e => {
-    if (e.key === 'addArticle') {
-      props.history.push('/index/add')
-    } else {
-      props.history.push('/index/list')
-    }
-  }
 
   const MenuClick = e => {
-    if (e.key === 'userlist') {
-      props.history.push('/index/userlist')
-    }
+    props.history.push(e.key)
   }
 
   return (
@@ -46,21 +35,16 @@ function AdminIndex(props) {
             <Icon type="pie-chart" />
             <span>工作台</span>
           </Menu.Item>
-          <SubMenu
-            key="sub1"
-            onClick={handleClickArticle}
-            title={(
-              <span>
-                <Icon type="desktop" />
-                <span>文章管理</span>
-              </span>
-            )}
-          >
-            <Menu.Item key="addArticle">添加文章</Menu.Item>
-            <Menu.Item key="articleList">文章列表</Menu.Item>
-          </SubMenu>
-          <Menu.Item key="userlist">
+          <Menu.Item key="/index/add">
+            <Icon type="addArticle" />
+            <span>编写文章</span>
+          </Menu.Item>
+          <Menu.Item key="/index/list">
             <Icon type="file" />
+            <span>文章列表</span>
+          </Menu.Item>
+          <Menu.Item key="/index/userlist">
+            <Icon type="user" />
             <span>用户管理</span>
           </Menu.Item>
           <Menu.Item key="9">

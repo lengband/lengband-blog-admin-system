@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment'
 import '../static/css/ArticleList.css'
 
 import {
-  List, Row, Col, Modal, message, Button,
+  Button, Modal, message, Divider, Table,
 } from 'antd';
 import http from '../lib/http'
 import { servicePath } from '../config/apiUrl'
@@ -22,7 +21,7 @@ function ArticleList(props) {
       header: { 'Access-Control-Allow-Origin': '*' },
     }).then(
       res => {
-        setList(res.data.list)
+        setList(res.data.data)
       },
     )
   }
@@ -45,9 +44,6 @@ function ArticleList(props) {
           },
         )
       },
-      onCancel() {
-        message.success('没有任何改变')
-      },
     });
   }
 
@@ -55,55 +51,42 @@ function ArticleList(props) {
     getList()
   }, [])
 
+  const columns = [
+    {
+      title: '标题',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '类别',
+      dataIndex: 'type.cn_name',
+      key: 'type.cn_name',
+    },
+    {
+      title: '发布时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+    },
+    {
+      title: '浏览量',
+      dataIndex: 'view_count',
+      key: 'view_count',
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (text, item) => (
+        <span>
+          <Button type="link" onClick={() => { updateArticle(item._id) }}>修改</Button>
+          <Divider type="vertical" />
+          <Button type="link" onClick={() => { delArticle(item._id) }}>删除</Button>
+        </span>
+      ),
+    },
+  ];
+
   return (
-    <div>
-      <List
-        header={(
-          <Row className="list-div">
-            <Col span={8}>
-              <b>标题</b>
-            </Col>
-            <Col span={3}>
-              <b>类别</b>
-            </Col>
-            <Col span={3}>
-              <b>发布时间</b>
-            </Col>
-            <Col span={3}>
-              <b>浏览量</b>
-            </Col>
-            <Col span={4}>
-              <b>操作</b>
-            </Col>
-          </Row>
-)}
-        bordered
-        dataSource={list}
-        renderItem={item => (
-          <List.Item>
-            <Row className="list-div">
-              <Col span={8}>
-                {item.title}
-              </Col>
-              <Col span={3}>
-                {item.typeName}
-              </Col>
-              <Col span={3}>
-                {moment(item.create_time).format('YYYY-MM-DD')}
-              </Col>
-              <Col span={3}>
-                {item.view_count}
-              </Col>
-              <Col span={4}>
-                <Button type="primary" onClick={() => { updateArticle(item.id) }}>修改</Button>
-&nbsp;
-                <Button onClick={() => { delArticle(item.id) }}>删除 </Button>
-              </Col>
-            </Row>
-          </List.Item>
-        )}
-      />
-    </div>
+    <Table columns={columns} dataSource={list} />
   )
 }
 export default ArticleList

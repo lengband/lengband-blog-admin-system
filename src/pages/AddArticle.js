@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import marked from 'marked'
-import moment from 'moment'
 import {
-  Row, Col, Input, Select, Button, DatePicker, message,
+  Row, Col, Input, Select, Button, message,
 } from 'antd'
 import http from '../lib/http'
 import { getToken } from '../lib/auth'
@@ -19,7 +18,6 @@ function AddArticle(props) {
   const [markdownContent, setMarkdownContent] = useState('预览内容') // html内容
   const [introducemd, setIntroducemd] = useState() // 简介的markdown内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') // 简介的html内容
-  const [createTime, setCreateTime] = useState() // 发布日期
   // const [updateDate, setUpdateDate] = useState() // 修改日志的日期
   const [typeOpts, setTypeOpts] = useState([]) // 文章类别信息
   const [selectedType, setSelectType] = useState('') // 选择的文章类别
@@ -53,16 +51,15 @@ function AddArticle(props) {
       header: { 'Access-Control-Allow-Origin': '*' },
     }).then(
       (res) => {
-        // let articleInfo= res.data.data[0]
-        setArticleTitle(res.data.data[0].title)
-        setArticleContent(res.data.data[0].article_content)
-        const html = marked(res.data.data[0].article_content)
+        const articleInfo = res.data
+        setArticleTitle(articleInfo.name)
+        setArticleContent(articleInfo.content)
+        const html = marked(articleInfo.content)
         setMarkdownContent(html)
-        setIntroducemd(res.data.data[0].introduce)
-        const tmpInt = marked(res.data.data[0].introduce)
+        setIntroducemd(articleInfo.introduce)
+        const tmpInt = marked(articleInfo.introduce)
         setIntroducehtml(tmpInt)
-        setCreateTime(res.data.data[0].create_time)
-        setSelectType(res.data.data[0].typeId)
+        setSelectType(articleInfo.type._id)
       },
     )
   }
@@ -96,7 +93,6 @@ function AddArticle(props) {
     dataProps.name = articleTitle
     dataProps.content = articleContent
     dataProps.introduce = introducemd
-    // dataProps.create_time = moment(createTime).format('YYYY-MM-DD HH:mm:ss')
     if (articleId === 0) { // 添加文章
       dataProps.view_count = 0
       http({
@@ -116,10 +112,9 @@ function AddArticle(props) {
         },
       )
     } else { // 修改文章
-      dataProps.id = articleId
       http({
-        method: 'post',
-        url: servicePath.updateArticle,
+        method: 'patch',
+        url: servicePath.updateArticle + articleId,
         header: { 'Access-Control-Allow-Origin': '*' },
         data: dataProps,
         withCredentials: true,
@@ -137,10 +132,10 @@ function AddArticle(props) {
 
   useEffect(() => {
     // 从中台得到文章类别信息
-    const getTypeInfo = () => {
+    const getTypeList = () => {
       http({
         method: 'get',
-        url: servicePath.getTypeInfo,
+        url: servicePath.getTypeList,
         header: { 'Access-Control-Allow-Origin': '*' },
         withCredentials: true,
       }).then(
@@ -148,16 +143,15 @@ function AddArticle(props) {
           if (!getToken()) {
             props.history.push('/')
           } else {
-            console.log(res.data.data, 'res.data.data');
             setTypeOpts(res.data.data)
             if (res.data.data && res.data.data.length) {
-              setSelectType(res.data.data[0].id) // !!! 未生效
+              setSelectType(res.data.data[0]._id) // !!! 未生效
             }
           }
         },
       )
     }
-    getTypeInfo()
+    getTypeList()
     // 获得文章ID
     const tmpId = props.match.params.id
     if (tmpId) {
@@ -182,7 +176,7 @@ function AddArticle(props) {
               />
             </Col>
             <Col span={4}>
-              <Select defaultValue={selectedType} size="large" onChange={selectTypeHandler}>
+              <Select className="w-100" value={selectedType} size="large" onChange={selectTypeHandler}>
                 {
                   typeOpts.map(item => (<Option key={item._id} value={item._id}>{item.cn_name}</Option>))
                 }
@@ -231,17 +225,6 @@ function AddArticle(props) {
                 className="introduce-html"
                 dangerouslySetInnerHTML={{ __html: `文章简介：${introducehtml}` }}
               />
-            </Col>
-            <Col span={12}>
-              <div className="date-select">
-                <DatePicker
-                  allowClear={false}
-                  value={moment(createTime)}
-                  onChange={(date, dateString) => setCreateTime(dateString)}
-                  placeholder="发布日期"
-                  size="large"
-                />
-              </div>
             </Col>
           </Row>
         </Col>
