@@ -3,10 +3,12 @@ import marked from 'marked'
 import {
   Row, Col, Input, Select, Button, message,
 } from 'antd'
+import hljs from 'highlight.js';
 import http from '../lib/http'
 import { getToken } from '../lib/auth'
 import { servicePath } from '../config/apiUrl'
 import '../static/css/AddArticle.css'
+import 'highlight.js/styles/monokai-sublime.css';
 
 const { Option } = Select
 const { TextArea } = Input
@@ -31,6 +33,9 @@ function AddArticle(props) {
     breaks: false,
     smartLists: true,
     smartypants: false,
+    highlight(code) {
+      return hljs.highlightAuto(code).value;
+    },
   });
 
   const changeContent = (e) => {
